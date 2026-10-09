@@ -1,0 +1,4 @@
+/.pi/*
+!/.pi
+!/.pi/realmem
+!/.pi/realmem/**
