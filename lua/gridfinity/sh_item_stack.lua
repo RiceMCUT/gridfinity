@@ -1,18 +1,19 @@
 Gridfinity.ItemStack = Gridfinity.ItemStack or {}
 
+Gridfinity.Cache.ItemStack_ItemStackMetaTable = Gridfinity.Cache.ItemStack_ItemStackMetaTable or {}
+
 local inheritCopy = RiceLib.Table.InheritCopy
-local uniqueID = RiceLib.Util.UniqueID
 
 --- @class Gridfinity.ItemStack.ItemStackValues
 local item_stack_base_values = {
-    Count = 0,
+    Count = 1,
 }
 
 --- @class Gridfinity.ItemStack.ItemStack : Gridfinity.ItemStack.ItemStackValues
 --- @field ItemDefinition Gridfinity.ItemDefinition.ItemClass
---- @field UniqueID string
---- @field Inventory Gridfinity.InventorySerivce.Inventory
-local item_stack_meta = {}
+--- @field Inventory Gridfinity.InventorySerivce.Inventory?
+--- @field InventoryIndex number?
+local item_stack_meta = Gridfinity.Cache.ItemStack_ItemStackMetaTable
 item_stack_meta.__index = item_stack_meta
 
 function item_stack_meta:GetDisplayName()
@@ -30,30 +31,24 @@ function item_stack_meta:SetData(key, value, no_network)
     if no_network then return end
     if not self.Inventory then return end
 
-    local data_length
-
-    if istable(value) then
-        value = util.Compress(util.TableToJSON(value))
-
-        data_length = #value
-    end
-
-    self.Inventory:SetItemStackData(self.InventoryIndex, key, value, data_length)
+    self.Inventory:SetItemStackData(self.InventoryIndex, key, value)
 end
 
 function item_stack_meta:GetData(key)
     return self[key]
 end
 
---- @return Gridfinity.ItemStack.ItemStack?
-function Gridfinity.ItemStack.Create(item_id, data, unique_id)
+--- @return Gridfinity.ItemStack.ItemStack
+function Gridfinity.ItemStack.Create(item_id, data)
     local item = Gridfinity.ItemDefinition.GetItem(item_id)
-    if not item then return end
 
-    unique_id = unique_id or uniqueID()
+    if not item then
+        RiceLib.Error(Format("Item %s does not exists", item_id), "Gridfinity")
+
+        return
+    end
 
     local item_stack = inheritCopy(data or {}, item_stack_base_values)
-    item_stack.UniqueID = unique_id
     item_stack.ItemDefinition = item
 
     setmetatable(item_stack, item_stack_meta) --- @cast item_stack Gridfinity.ItemStack.ItemStack

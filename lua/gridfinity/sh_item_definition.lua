@@ -3,7 +3,6 @@ Gridfinity.Cache.ItemDefinitionTable = Gridfinity.Cache.ItemDefinitionTable or {
 Gridfinity.Cache.ItemDefinitionBaseClass = Gridfinity.Cache.ItemDefinitionBaseClass or {}
 
 local ItemDefinitionTable = Gridfinity.Cache.ItemDefinitionTable
-local ItemBaseClass = Gridfinity.Cache.ItemDefinitionBaseClass
 
 --- @class Gridfinity.ItemDefinition.RegisterData
 local item_base_values = {
@@ -12,7 +11,7 @@ local item_base_values = {
 }
 
 --- @class Gridfinity.ItemDefinition.ItemClass : Gridfinity.ItemDefinition.RegisterData
-local item_baseclass = {}
+local item_baseclass = Gridfinity.Cache.ItemDefinitionBaseClass
 item_baseclass.__index = item_baseclass
 
 function item_baseclass:GetDisplayName(item_stack)
