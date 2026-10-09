@@ -18,6 +18,4 @@ along with this program.  If not, see <https://gnu.org>.
 Gridfinity = Gridfinity or {}
 Gridfinity.Cache = Gridfinity.Cache or {}
 
-RiceLib.IncludeDir("gridfinity/proto")
-RiceLib.IncludeDir("gridfinity", true)
-RiceLib.IncludeDir("gridfinity/items")
+RiceLib.IncludeDir("gridfinity")
